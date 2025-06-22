@@ -36,9 +36,7 @@ impl App for ChatApp {
             });
 
             ui.horizontal(|ui| {
-                let send_pressed = ui
-                    .text_edit_singleline(&mut self.input)
-                    .lost_focus()
+                let send_pressed = ui.text_edit_singleline(&mut self.input).lost_focus()
                     && ui.input(|i| i.key_pressed(egui::Key::Enter));
 
                 if ui.button("Send").clicked() || send_pressed {

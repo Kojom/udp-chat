@@ -2,9 +2,9 @@ use anyhow::Result;
 use socket2::{Domain, Protocol, Socket, Type};
 use std::collections::HashSet;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
+use std::sync::Arc;
 use tokio::net::UdpSocket;
 use tokio::sync::Mutex;
-use std::sync::Arc;
 
 async fn create_broadcast_socket() -> Result<UdpSocket> {
     let socket = Socket::new(Domain::IPV4, Type::DGRAM, Some(Protocol::UDP))?;
