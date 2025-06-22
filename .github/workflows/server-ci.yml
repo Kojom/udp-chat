@@ -1,0 +1,41 @@
+name: Rust Server CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Format check
+      run: cargo fmt --all --check
+
+    - name: Clippy check
+      run: cargo clippy --all-targets --all-features -- -D warnings
+
+    - name: Build check
+      run: cargo check --workspace --all-targets
+
+    - name: Run tests
+      run: cargo test --workspace --all-targets
+
+  docker:
+    needs: build_and_lint
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: docker build -f server/Dockerfile -t udp-server:latest .
