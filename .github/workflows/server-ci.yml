@@ -1,4 +1,4 @@
-name: Rust Server CI
+name: Rust Client CI
 
 on:
   push:
@@ -38,4 +38,4 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Build Docker image
-      run: docker build -f server/Dockerfile -t udp-server:latest .
+      run: docker build -f Dockerfile -t udp-client:latest .
