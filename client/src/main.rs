@@ -28,12 +28,36 @@ impl Default for ChatApp {
 impl App for ChatApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            egui::ScrollArea::vertical().show(ui, |ui| {
-                let msgs = self.messages.lock().unwrap();
-                for msg in msgs.iter() {
-                    ui.label(msg);
-                }
-            });
+            let available = ui.available_size();
+
+            let input_height = 32.0;
+            let scroll_height = available.y - input_height;
+
+            egui::ScrollArea::vertical()
+                .auto_shrink([false; 2])
+                .stick_to_bottom(true)
+                .max_height(scroll_height)
+                .show(ui, |ui| {
+                    let msgs = self.messages.lock().unwrap();
+                    for msg in msgs.iter() {
+                        egui::Frame::group(ui.style())
+                            .fill(ui.visuals().extreme_bg_color)
+                            .rounding(egui::Rounding::same(8.0))
+                            .stroke(egui::Stroke::NONE)
+                            .inner_margin(egui::Margin::same(6.0))
+                            .show(ui, |ui| {
+                                ui.label(
+                                    egui::RichText::new(msg)
+                                        .monospace()
+                                        .size(14.0),
+                                );
+                            });
+
+                        ui.add_space(4.0);
+                    }
+                });
+
+            ui.add_space(2.0);
 
             ui.horizontal(|ui| {
                 let send_pressed = ui.text_edit_singleline(&mut self.input).lost_focus()
