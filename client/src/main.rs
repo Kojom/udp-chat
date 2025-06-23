@@ -46,10 +46,7 @@ impl App for ChatApp {
                             .stroke(egui::Stroke::NONE)
                             .inner_margin(egui::Margin::same(6.0))
                             .show(ui, |ui| {
-                                ui.label(
-                                    egui::RichText::new(msg)
-                                        .monospace()
-                                        .size(14.0),
+                                ui.label(egui::RichText::new(msg).monospace().size(14.0),
                                 );
                             });
 
