@@ -40,16 +40,38 @@ impl App for ChatApp {
                 .show(ui, |ui| {
                     let msgs = self.messages.lock().unwrap();
                     for msg in msgs.iter() {
-                        egui::Frame::group(ui.style())
-                            .fill(ui.visuals().extreme_bg_color)
-                            .rounding(egui::Rounding::same(8.0))
-                            .stroke(egui::Stroke::NONE)
-                            .inner_margin(egui::Margin::same(6.0))
-                            .show(ui, |ui| {
-                                ui.label(egui::RichText::new(msg).monospace().size(14.0));
-                            });
+                        let is_mine = msg.starts_with("Me:");
 
-                        ui.add_space(4.0);
+                        let layout = if is_mine {
+                            egui::Layout::right_to_left(egui::Align::Min)
+                        } else {
+                            egui::Layout::left_to_right(egui::Align::Min)
+                        };
+
+                        ui.allocate_ui_with_layout(ui.available_size(), layout, |ui| {
+                            let bubble_color = if is_mine {
+                                egui::Color32::from_rgb(0xCC, 0xEE, 0xFF)
+                            } else {
+                                egui::Color32::from_gray(230)
+                            };
+
+                            egui::Frame::none()
+                                .fill(bubble_color)
+                                .rounding(egui::Rounding::same(10.0))
+                                .inner_margin(egui::Margin::symmetric(10.0, 6.0))
+                                .show(ui, |ui| {
+                                    ui.set_max_width(ui.available_width() * 0.7);
+
+                                    ui.vertical(|ui| {
+                                        ui.label(
+                                            egui::RichText::new(msg)
+                                                .monospace()
+                                                .size(14.0),
+                                        );
+                                    });
+                                });
+                        });
+                        ui.add_space(6.0);
                     }
                 });
 
