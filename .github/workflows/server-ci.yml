@@ -28,14 +28,3 @@ jobs:
 
     - name: Run tests
       run: cargo test --workspace --all-targets
-
-  docker:
-    needs: build_and_lint
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Build Docker image
-      run: docker build -f Dockerfile -t udp-client:latest .
