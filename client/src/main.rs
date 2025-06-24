@@ -61,13 +61,8 @@ impl App for ChatApp {
                                 .inner_margin(egui::Margin::symmetric(10.0, 6.0))
                                 .show(ui, |ui| {
                                     ui.set_max_width(ui.available_width() * 0.7);
-
                                     ui.vertical(|ui| {
-                                        ui.label(
-                                            egui::RichText::new(msg)
-                                                .monospace()
-                                                .size(14.0),
-                                        );
+                                        ui.label(egui::RichText::new(msg).monospace().size(14.0));
                                     });
                                 });
                         });
